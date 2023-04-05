@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_hooks/counter_app.dart';
-import 'package:flutter_application_hooks/waether.app.dart';
+import 'package:flutter_application_hooks/person.app.2.dart';
+import 'package:flutter_application_hooks/person.app.dart';
+import 'package:flutter_application_hooks/weather.app.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 void main() => runApp(const ProviderScope(child: AppWidget()));
@@ -79,6 +81,30 @@ class HomePage extends ConsumerWidget {
               ),
               color: Colors.blue[200],
               child: const Text("Weather App"),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            MaterialButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const PersonApp(),
+                ),
+              ),
+              color: Colors.blue[300],
+              child: const Text("Person App"),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            MaterialButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const PersonedApp(),
+                ),
+              ),
+              color: Colors.blue[400],
+              child: const Text("Person App"),
             ),
             const SizedBox(
               height: 25,

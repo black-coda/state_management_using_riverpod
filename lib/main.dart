@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_hooks/counter_app.dart';
+import 'package:flutter_application_hooks/filmapp.dart';
 import 'package:flutter_application_hooks/person.app.2.dart';
 import 'package:flutter_application_hooks/person.app.dart';
 import 'package:flutter_application_hooks/weather.app.dart';
@@ -100,11 +101,23 @@ class HomePage extends ConsumerWidget {
             MaterialButton(
               onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (context) => const PersonedApp(),
+                  builder: (context) => const PersonaApp(),
                 ),
               ),
               color: Colors.blue[400],
               child: const Text("Person App"),
+            ),
+            const SizedBox(
+              height: 25,
+            ),
+            MaterialButton(
+              onPressed: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const FilmApp(),
+                ),
+              ),
+              color: Colors.blue[500],
+              child: const Text("Film App"),
             ),
             const SizedBox(
               height: 25,

@@ -34,7 +34,7 @@ class Person {
   @override
   int get hashCode => uuid.hashCode;
 
-  String get displayName => "$name ${(age)}";
+  String get displayName => "$name ($age year's old)";
 }
 
 class PersonNotifier extends ChangeNotifier {
@@ -75,7 +75,7 @@ final _ageController = TextEditingController();
 
 Future<Person?> createOrUpdatePersonDialog(BuildContext context,
     [Person? existingPerson]) {
-  String? name = existingPerson?.name.trim();
+  String? name = existingPerson?.name;
   int? age = existingPerson?.age;
 
   _nameController.text = name ?? '';
@@ -86,14 +86,52 @@ Future<Person?> createOrUpdatePersonDialog(BuildContext context,
     builder: (context) {
       return AlertDialog(
         title: const Text("Create Person Object"),
+        actions: [
+          TextButton(
+            onPressed: Navigator.of(context).pop,
+            child: const Text("Cancel"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              if (name != null && age != null) {
+                if (existingPerson != null) {
+                  final newPerson =
+                      existingPerson.copyWith(name: name, age: age);
+                  Navigator.of(context).pop(newPerson);
+                } else {
+                  Navigator.of(context).pop(
+                    Person(name: name!, age: age!),
+                  );
+                }
+              } else {}
+            },
+            child: const Text(
+              "Save",
+            ),
+          )
+        ],
         content: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               autocorrect: true,
               controller: _nameController,
-              decoration:
-                  const InputDecoration.collapsed(hintText: "Enter your name"),
-            )
+              decoration: const InputDecoration(
+                  hintText: "Enter your name", border: OutlineInputBorder()),
+              onChanged: (value) {
+                name = value;
+              },
+            ),
+            TextField(
+              keyboardType: TextInputType.number,
+              autocorrect: true,
+              controller: _ageController,
+              decoration: const InputDecoration(hintText: "Enter your age"),
+              onChanged: (value) {
+                age = int.tryParse(value);
+              },
+            ),
           ],
         ),
       );
@@ -101,13 +139,46 @@ Future<Person?> createOrUpdatePersonDialog(BuildContext context,
   );
 }
 
-class PersonedApp extends StatelessWidget {
-  const PersonedApp({super.key});
+class PersonaApp extends StatelessWidget {
+  const PersonaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: SingleChildScrollView(),
+    return Consumer(
+      builder: (BuildContext context, WidgetRef ref, Widget? child) {
+        final dataModel = ref.watch(personProvider);
+        return Scaffold(
+          floatingActionButton: FloatingActionButton(
+            onPressed: () async {
+              final person = await createOrUpdatePersonDialog(context);
+              if (person != null) {
+                final dmodel = ref.read(personProvider).add(person);
+              }
+            },
+          ),
+          body: SafeArea(
+            child: ListView.builder(
+              itemCount: dataModel.count,
+              itemBuilder: (BuildContext context, int index) {
+                final person = dataModel.people[index];
+                return GestureDetector(
+                  onTap: () async {
+                    final updatedPerson =
+                        await createOrUpdatePersonDialog(context, person);
+
+                    if (updatedPerson != null) {
+                      dataModel.update(updatedPerson);
+                    }
+                  },
+                  child: ListTile(
+                    title: Text(person.displayName),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

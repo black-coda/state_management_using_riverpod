@@ -5,7 +5,7 @@
 		}
 	],
 	"settings": {
-		"editor.fontFamily": "\"Test Söhne Mono\",\"operator mono lig\",'Fira code',\"ibm plex mono\"",
-		"editor.fontSize": 14
+		"editor.fontFamily": "\"Test Söhne  Mono\",\"operator mono lig\",'Fira code',\"ibm plex mono\"",
+		"editor.fontSize": 15
 	}
 }
